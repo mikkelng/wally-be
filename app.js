@@ -2,26 +2,31 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const db = require("./db/index");
-const { readdirSync } = require("fs");
-
 require("dotenv").config();
+require("./config")(app);  // Apply middleware configuration
+const PORT = process.env.PORT || 5005;
 
-const PORT = process.env.PORT;
 
-//middlewares
+// Routes
+const indexRoutes = require("./routes/index.routes");
+app.use("/api", indexRoutes);
+
+const authRoutes = require("./routes/auth.routes");
+app.use("/auth", authRoutes);  // Ensure this line is present
+
+
+// Middleware
 app.use(express.json());
 app.use(cors());
 
-// app.get('/', (req, res )=>{
-//     res.send('hello')
-// } )
+// Error handling (must be after all routes)
+require("./error-handling"  )(app);
 
-readdirSync("./routes").map((route) =>
-  app.use("/api/v1", require("./routes/" + route))
-);
+module.exports = app;
+// Start the server
 const server = () => {
   app.listen(PORT, () => {
-    console.log("listening to port:", PORT);
+    console.log(`Server listening on http://localhost:${PORT}`);
   });
 };
 
