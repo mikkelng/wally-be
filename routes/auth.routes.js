@@ -1,6 +1,6 @@
 const express = require("express");
-const bcrypt = require("bcryptjs"); // Used for encrypting passwords
-const jwt = require("jsonwebtoken"); // Used for creating, signing and verifying JWTs
+const bcrypt = require("bcryptjs"); 
+const jwt = require("jsonwebtoken"); 
 const User = require("../models/User.model");
 const { isAuthenticated } = require("./../middlewares/jwt.middleware");
 
@@ -12,20 +12,17 @@ router.post("/signup", async (req, res, next) => {
     console.log("Signup route hit");
     const { email, password, name } = req.body;
     try {
-        // Check if email, password and name are provided as empty strings
         if (email === "" || password === "" || name === "") {
         res.status(400).json({ message: "Provide email, name, password" });
         return;
         }
-
-        // Verify if the email is matching the required format
+ 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
         if (emailRegex.test(email) === false) {
         res.status(400).json({ message: "Provide a valid email address" });
         return;
         }
 
-        // Check if the user with the given email already exists
         const foundUser = await User.findOne({ email: email });
 
         if (foundUser) {
