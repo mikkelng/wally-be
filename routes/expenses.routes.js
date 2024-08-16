@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Expense = require('../models/Expense.model');
-const { isAuthenticated } = require('../middleware/jwt.middleware.js');
+const { isAuthenticated } = require('../middlewares/jwt.middleware.js');
 
 // Create a new expense
 router.post('/expenses', isAuthenticated, async (req, res) => {
