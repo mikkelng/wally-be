@@ -15,10 +15,10 @@ const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);  // Ensure this line is present
 
 const expenseRoutes = require('./routes/expenses.routes');
-app.use("auth", expenseRoutes);
+app.use("api", expenseRoutes);
 
 const incomeRoutes = require('./routes/income.routes');
-app.use("/auth", incomeRoutes);
+app.use("/api", incomeRoutes);
 
 // Error handling (must be after all routes)
 require("./error-handling"  )(app);
