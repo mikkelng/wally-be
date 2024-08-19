@@ -6,7 +6,7 @@ const incomeSchema = new Schema(
             type: Number,
             required: true,
         },
-        source: {
+        category: {
             type: String,
             required: true,
         },

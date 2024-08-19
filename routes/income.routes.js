@@ -5,16 +5,17 @@ const { isAuthenticated } = require('../middlewares/jwt.middleware.js');
 // Create a new income
 router.post('/income', isAuthenticated, async (req, res) => {
     try {
-        const { amount, source, description, date } = req.body;
+        const { amount, category, description, date } = req.body;
         const newIncome = await Income.create({
             amount,
-            source,
+            category,
             description,
             date,
             owner: req.payload._id,
         });
         res.json(newIncome);
     } catch (err) {
+        console.log(err)
         res.status(500).json({ message: "Error creating income" });
     }
 });
@@ -25,7 +26,7 @@ router.get('/income', isAuthenticated, async (req, res) => {
         const incomeList = await Income.find({ owner: req.payload._id });
         res.json(incomeList);
     } catch (err) {
-        res.status(500).json({ message: "Error fetching income records" });
+        res.status(500).json({ message: "Error income records" });
     }
 });
 
