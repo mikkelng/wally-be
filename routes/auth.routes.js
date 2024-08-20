@@ -30,24 +30,22 @@ router.post("/signup", async (req, res, next) => {
         return;
         }
 
-        // Create the salt and encrypt the password asynchornously -  - genSalt() hash()
+    
         const salt = await bcrypt.genSalt(saltRounds);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Create the new user document with the email, encrypted password and name
+   
         const createdUser = await User.create({
         email: email,
         password: hashedPassword,
         name: name,
         });
 
-        // Destructure the document to omit the password
+     
         const { email: userEmail, name: userName, _id } = createdUser;
-
-        // Create a new object without the password
         const user = { email: userEmail, name: userName, _id: _id };
 
-        // Return the response with the user data but without the password
+      
         res.status(201).json(user);
     } catch (error) {
         next(err);
@@ -64,35 +62,30 @@ router.post("/login", async (req, res, next) => {
         return;
         }
 
-        // Check the users collection if the user with the email address exists
+    
         const foundUser = await User.findOne({ email: email });
         if (!foundUser) {
         res.status(401).json({ message: "User not found" });
         return;
         }
-
-        // Compare the password (asynchronously) with the one the password saved in the DB for the user
         const passwordCorrect = await bcrypt.compare(password, foundUser.password);
 
         if (passwordCorrect) {
-        // Prepare the user data to include in the token
         const { email, name, _id } = foundUser;
 
         const user = { email, name, _id };
 
-        // Create and sign a JWT token
         const authToken = jwt.sign(user, process.env.TOKEN_SECRET, {
             algorithm: "HS256",
             expiresIn: "6h",
         });
 
-        // Send back the JWT token in the response
         res.status(200).json({ authToken: authToken });
         } else {
         res.status(400).json({ message: "Unable to authorize the user" });
         }
     } catch (error) {
-        next(err);
+        res.status(500).json(error)
     }
 });
 
