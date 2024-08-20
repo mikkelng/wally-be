@@ -85,7 +85,8 @@ router.post("/login", async (req, res, next) => {
         res.status(400).json({ message: "Unable to authorize the user" });
         }
     } catch (error) {
-        res.status(500).json(error)
+        console.log("Internal Server Error:", error.message || error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
 });
 
